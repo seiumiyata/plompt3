@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>提案資料プロンプト作成ツール</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #007aff;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007aff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        button:hover {
+            background-color: #005bb5;
+        }
+        .checkbox-group {
+            margin-top: 10px;
+        }
+        .checkbox-group label {
+            display: inline-block;
+            margin-right: 10px;
+        }
+        #generatedPrompt {
+            white-space: pre-wrap;
+            background-color: #f4f4f4;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+        small {
+            display: block;
+            margin-top: -15px;
+            margin-bottom: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>提案資料プロンプト作成ツール</h1>
+        <form id="promptForm">
+            <label for="productName">商品名</label>
+            <input type="text" id="productName" name="productName" required oninput="updatePreview()">
+
+            <label for="manufacturer">製造メーカー</label>
+            <input type="text" id="manufacturer" name="manufacturer" required oninput="updatePreview()">
+
+            <label for="productConcept">商品コンセプト</label>
+            <textarea id="productConcept" name="productConcept" rows="4" required oninput="updatePreview()"></textarea>
+            <small>商品コンセプトには以下の内容を含めると良いでしょう:
+                <ul>
+                    <li>商品名</li>
+                    <li>商品カテゴリー</li>
+                    <li>ターゲット顧客</li>
+                    <li>顧客のニーズ</li>
+                    <li>商品の特徴と利点</li>
+                    <li>競合優位性</li>
+                    <li>独自性</li>
+                    <li>価値提案</li>
+                    <li>使用シーン</li>
+                    <li>ブランドストーリー</li>
+                    <li>顧客の声やフィードバック</li>
+                </ul>
+            </small>
+
+            <label for="competitors">競合商品</label>
+            <textarea id="competitors" name="competitors" rows="4" required oninput="updatePreview()"></textarea>
+
+            <div class="checkbox-group">
+                <label><input type="checkbox" name="sections" value="背景・目的" onchange="updatePreview()"> 背景・目的</label>
+                <label><input type="checkbox" name="sections" value="商品コンセプト" onchange="updatePreview()"> 商品コンセプト</label>
+                <label><input type="checkbox" name="sections" value="製品仕様" onchange="updatePreview()"> 製品仕様</label>
+                <label><input type="checkbox" name="sections" value="ターゲット市場" onchange="updatePreview()"> ターゲット市場</label>
+                <label><input type="checkbox" name="sections" value="市場調査と競合分析" onchange="updatePreview()"> 市場調査と競合分析</label>
+                <label><input type="checkbox" name="sections" value="販売戦略" onchange="updatePreview()"> 販売戦略</label>
+                <label><input type="checkbox" name="sections" value="スケジュール" onchange="updatePreview()"> スケジュール</label>
+                <label><input type="checkbox" name="sections" value="予算計画" onchange="updatePreview()"> 予算計画</label>
+                <label><input type="checkbox" name="sections" value="リスク分析" onchange="updatePreview()"> リスク分析</label>
+                <label><input type="checkbox" name="sections" value="問い合わせ先" onchange="updatePreview()"> 問い合わせ先</label>
+                <label><input type="checkbox" name="sections" value="顧客の声やフィードバック" onchange="updatePreview()"> 顧客の声やフィードバック</label>
+                <label><input type="checkbox" name="sections" value="実績と事例" onchange="updatePreview()"> 実績と事例</label>
+                <label><input type="checkbox" name="sections" value="技術的な詳細" onchange="updatePreview()"> 技術的な詳細</label>
+                <label><input type="checkbox" name="sections" value="環境への配慮" onchange="updatePreview()"> 環境への配慮</label>
+                <label><input type="checkbox" name="sections" value="マーケティング戦略" onchange="updatePreview()"> マーケティング戦略</label>
+                <label><input type="checkbox" name="sections" value="販売予測とROI" onchange="updatePreview()"> 販売予測とROI</label>
+                <label><input type="checkbox" name="sections" value="サポート体制" onchange="updatePreview()"> サポート体制</label>
+                <label><input type="checkbox" name="sections" value="リスク管理" onchange="updatePreview()"> リスク管理</label>
+                <label><input type="checkbox" name="sections" value="法規制対応" onchange="updatePreview()"> 法規制対応</label>
+                <label><input type="checkbox" name="sections" value="競合他社の動向" onchange="updatePreview()"> 競合他社の動向</label>
+                <label><input type="checkbox" name="sections" value="ビジュアル資料" onchange="updatePreview()"> ビジュアル資料</label>
+                <label><input type="checkbox" name="sections" value="FAQ" onchange="updatePreview()"> FAQ</label>
+            </div>
+
+            <label><input type="checkbox" id="hasAttachment" onchange="updatePreview()"> 添付ファイルがあります</label>
+            <label><input type="checkbox" id="mainSubOnly" onchange="updatePreview()"> メイン議題、サブ議題のみ書き出し</label>
+
+            <button type="button" onclick="generatePrompt()">プロンプトを生成</button>
+            <button type="button" onclick="clearForm()">クリア</button>
+        </form>
+
+        <h2>生成されたプロンプト</h2>
+        <pre id="generatedPrompt"></pre>
+        <button onclick="copyToClipboard()">コピー</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            loadFormData();
+        });
+
+        function updatePreview() {
+            const productName = document.getElementById('productName').value;
+            const manufacturer = document.getElementById('manufacturer').value;
+            const productConcept = document.getElementById('productConcept').value;
+            const competitors = document.getElementById('competitors').value;
+            const hasAttachment = document.getElementById('hasAttachment').checked;
+            const mainSubOnly = document.getElementById('mainSubOnly').checked;
+
+            const selectedSections = Array.from(document.querySelectorAll('input[name="sections"]:checked'))
+                .map(checkbox => checkbox.value);
+
+            let prompt = `
+商品名: ${productName}
+製造メーカー: ${manufacturer}
+商品コンセプト: ${productConcept}
+競合商品: ${competitors}
+
+以上の情報を基に、下記項目の提案資料の骨子を作成してください。最新の市場情報や競合分析を含めるために、Web検索を行い、最新情報を盛り込んでください。
+
+${selectedSections.map(section => `- ${section}`).join('\n')}
+            `;
+
+            if (hasAttachment) {
+                prompt += "\n添付ファイルも参照してください。";
+            }
+
+            if (mainSubOnly) {
+                prompt += "\nメインタイトルと付随するサブタイトルのみ書き出してください。余計な文言は不要です。";
+            }
+
+            document.getElementById('generatedPrompt').textContent = prompt;
+            saveFormData();
+        }
+
+        function generatePrompt() {
+            updatePreview();
+        }
+
+        function copyToClipboard() {
+            const promptText = document.getElementById('generatedPrompt').textContent;
+            navigator.clipboard.writeText(promptText).then(() => {
+                alert('プロンプトがコピーされました。');
+            }).catch(err => {
+                console.error('コピーに失敗しました: ', err);
+            });
+        }
+
+        function saveFormData() {
+            const formData = {
+                productName: document.getElementById('productName').value,
+                manufacturer: document.getElementById('manufacturer').value,
+                productConcept: document.getElementById('productConcept').value,
+                competitors: document.getElementById('competitors').value,
+                selectedSections: Array.from(document.querySelectorAll('input[name="sections"]:checked'))
+                    .map(checkbox => checkbox.value),
+                hasAttachment: document.getElementById('hasAttachment').checked,
+                mainSubOnly: document.getElementById('mainSubOnly').checked
+            };
+            localStorage.setItem('formData', JSON.stringify(formData));
+        }
+
+        function loadFormData() {
+            const savedData = localStorage.getItem('formData');
+            if (savedData) {
+                const formData = JSON.parse(savedData);
+                document.getElementById('productName').value = formData.productName;
+                document.getElementById('manufacturer').value = formData.manufacturer;
+                document.getElementById('productConcept').value = formData.productConcept;
+                document.getElementById('competitors').value = formData.competitors;
+                formData.selectedSections.forEach(section => {
+                    document.querySelector(`input[name="sections"][value="${section}"]`).checked = true;
+                });
+                document.getElementById('hasAttachment').checked = formData.hasAttachment;
+                document.getElementById('mainSubOnly').checked = formData.mainSubOnly;
+                updatePreview();
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('promptForm').reset();
+            localStorage.removeItem('formData');
+            document.getElementById('generatedPrompt').textContent = '';
+        }
+    </script>
+</body>
+</html>
